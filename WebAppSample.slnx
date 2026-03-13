@@ -1,0 +1,8 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+
+    <Project Path="WebAppSample/WebAppSample.csproj" />
+    <Project Path="WebAppSample.Tests/WebAppSample.Tests.csproj" />
+</Solution>

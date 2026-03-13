@@ -1,0 +1,79 @@
+{
+  "id": "10121d24-7260-44fd-a1e4-05f4d681942e",
+  "template": "app-nolayers",
+  "versions": {
+    "AbpFramework": "10.1.0",
+    "AbpStudio": "2.2.1",
+    "TargetDotnetFramework": "net10.0"
+  },
+  "modules": {
+    "WebAppSample": {
+      "path": "WebAppSample.abpmdl",
+      "isMainApplication": true,
+      "folder": "main"
+    }
+  },
+  "runProfiles": {
+    "Default": {
+      "path": "etc/run-profiles/Default.abprun.json"
+    }
+  },
+  "options": {
+    "httpRequests": {
+      "ignoredUrls": []
+    }
+  },
+  "creatingStudioConfiguration": {
+    "template": "app-nolayers",
+    "createdAbpStudioVersion": "2.2.1",
+    "creationTool": "ABP Studio UI",
+    "multiTenancy": "true",
+    "runInstallLibs": "",
+    "useLocalReferences": "false",
+    "uiFramework": "angular",
+    "databaseProvider": "ef",
+    "runDbMigrator": "",
+    "includeTests": "true",
+    "databaseManagementSystem": "sqlite",
+    "createInitialMigration": "",
+    "theme": "leptonx-lite",
+    "themeStyle": "",
+    "themeMenuPlacement": "",
+    "progressiveWebApp": "",
+    "runProgressiveWebAppSupport": "",
+    "publicWebsite": "",
+    "socialLogin": "false",
+    "sampleCrudPage": "false",
+    "selectedLanguages": [
+      "English",
+      "Arabic",
+      "Chinese (Simplified)",
+      "Chinese (Traditional)",
+      "Czech",
+      "English (United Kingdom)",
+      "Finnish",
+      "French",
+      "German (Germany)",
+      "Hindi ",
+      "Hungarian",
+      "Icelandic",
+      "Italian",
+      "Portuguese (Brazil)",
+      "Romanian (Romania)",
+      "Russian",
+      "Slovak",
+      "Spanish",
+      "Swedish",
+      "Turkish",
+      "Vie"
+    ],
+    "defaultLanguage": "English",
+    "createCommand": "abp new WebAppSample -t app-nolayers --ui-framework angular --mobile  --database-provider ef --database-management-system sqlite --theme leptonx-lite --skip-migration  --skip-migrator  --without-cms-kit --dont-run-install-libs --dont-run-bundling --no-social-logins -no-gdpr -no-openiddict-admin-ui -no-audit-logging -no-file-management -no-language-management -no-text-template-management"
+  },
+  "folders": {
+    "items": {
+      "main": {},
+      "modules": {}
+    }
+  }
+}
