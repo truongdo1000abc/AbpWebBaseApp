@@ -16,7 +16,7 @@
           @if (hasLoggedIn && (currentUser$ | async); as user){
           <h1 class="display-5 fw-bold text-success">
           </h1>
-          <p class="fs-4 text-muted">Chúc bạn một ngày làm việc hiệu quả: {{ user.name + " " + user.surName }}</p>
+          <p class="fs-4 text-muted"> {{ '::Welcome_User' | abpLocalization: user.name + " " + user.surName }}</p>
         
           }
           

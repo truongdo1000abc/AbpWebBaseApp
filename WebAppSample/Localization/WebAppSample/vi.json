@@ -5,6 +5,7 @@
     "Welcome_Title": "Chào mừng bạn",
     "Welcome_Text": "Đây là một mẫu khởi động ứng dụng lớp đơn, tối giản cho ABP Framework.",
     "Menu:Home": "Trang chủ",
-    "Menu:Product": "Sản phẩm"
+    "Menu:Products": "Sản phẩm",
+    "Welcome_User": "Chào mừng trở lại, {0}!"
   }
 }

@@ -5,7 +5,7 @@
     "Welcome_Title": "Welcome",
     "Welcome_Text": "This is a minimalist, single layer application startup template for the ABP Framework.",
     "Menu:Home": "Home",
-    "Menu:Product": "Products",
-    "AppNameText": "Sale Management"
+    "Menu:Products": "Products",
+    "Welcome_User": "Welcome back, {0}!"
   }
 }

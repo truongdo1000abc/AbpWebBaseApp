@@ -19,7 +19,7 @@ function configureRoutes() {
     },
     {
       path: '/products',
-      name: '::Menu:Product', 
+      name: '::Menu:Products', 
       iconClass: 'fas fa-tags',        
       order: 2,                        
       layout: eLayoutType.application, 

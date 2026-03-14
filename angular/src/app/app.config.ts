@@ -18,6 +18,23 @@ import { APP_ROUTES } from './app.routes';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { FOOTER_PROVIDER } from './footer/footer.config';
 
+// 1. Thêm 2 dòng này để tải sẵn file tiếng Việt của Angular
+import { registerLocaleData } from '@angular/common';
+import localeVi from '@angular/common/locales/vi';
+
+// 2. Khai báo cứng luôn cho cả 2 trường hợp vi và vi-VN
+registerLocaleData(localeVi, 'vi');
+registerLocaleData(localeVi, 'vi-VN');
+
+// 3. Viết một hàm "vá lỗi" để chặn việc ABP đi tìm file động đối với tiếng Việt
+const abpRegisterLocale = registerLocaleForEsBuild();
+const customRegisterLocaleFn = (cultureName: string) => {
+  if (cultureName.includes('vi')) {
+    return Promise.resolve(); // Trả về thành công luôn, khỏi đi tìm file nữa
+  }
+  return abpRegisterLocale(cultureName); // Các ngôn ngữ khác kệ cho ABP tự lo
+};
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(APP_ROUTES),
@@ -27,7 +44,9 @@ export const appConfig: ApplicationConfig = {
     provideAbpCore(
       withOptions({
         environment,
-        registerLocaleFn: registerLocaleForEsBuild(),
+        //registerLocaleFn: registerLocaleForEsBuild(),
+        // 4. Thay thế hàm mặc định của ABP bằng hàm vá lỗi của chúng ta
+        registerLocaleFn: customRegisterLocaleFn,
       }),
     ),
     provideAbpOAuth(),
