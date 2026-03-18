@@ -4,6 +4,15 @@
     "AppName": "WebAppSample",
     "Welcome_Title": "Bienvenido",
     "Welcome_Text": "Esta es una plantilla de inicio de aplicación minimalista de una sola capa para ABP Framework.",
-    "Menu:Home": "Inicio"
+    "Menu:Home": "Inicio",
+    "Menu:Products": "Productos",
+    "Menu:ProductGroups": "Grupos de Productos",
+    "Welcome_User": "Bienvenido de nuevo, {0}!",
+    "Permission:AppManagement": "Gestión de la aplicación",
+    "Permission:Products": "Gestión de productos",
+    "Permission:ProductGroups": "Gestión de grupos de productos",
+    "Permission:Create": "Crear",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Eliminar"
   }
 }

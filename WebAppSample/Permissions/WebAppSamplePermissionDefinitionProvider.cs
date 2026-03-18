@@ -9,15 +9,19 @@ public class WebAppSamplePermissionDefinitionProvider : PermissionDefinitionProv
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(WebAppSamplePermissions.GroupName);
+        var appGroup = context.AddGroup(WebAppSamplePermissions.GroupName, L("AppManagement"));
 
-        // Định nghĩa quyền xem danh sách (dùng cho Menu)
-        var productPermission = myGroup.AddPermission("MyProject.Products", L("Products"));
-        
-        // Định nghĩa các quyền thao tác chi tiết (Thêm, Sửa, Xóa)
-        productPermission.AddChild("MyProject.Products.Create", L("Create"));
-        productPermission.AddChild("MyProject.Products.Edit", L("Edit"));
-        productPermission.AddChild("MyProject.Products.Delete", L("Delete"));
+        // Định nghĩa quyền cho Products
+        var productPermission = appGroup.AddPermission(WebAppSamplePermissions.Products.Default, L("Permission:Products"));
+        productPermission.AddChild(WebAppSamplePermissions.Products.Create, L("Permission:Create"));
+        productPermission.AddChild(WebAppSamplePermissions.Products.Edit, L("Permission:Edit"));
+        productPermission.AddChild(WebAppSamplePermissions.Products.Delete, L("Permission:Delete"));
+
+        // Định nghĩa quyền cho ProductGroups
+        var productGroupPermission = appGroup.AddPermission(WebAppSamplePermissions.ProductGroups.Default, L("Permission:ProductGroups"));
+        productGroupPermission.AddChild(WebAppSamplePermissions.ProductGroups.Create, L("Permission:Create"));
+        productGroupPermission.AddChild(WebAppSamplePermissions.ProductGroups.Edit, L("Permission:Edit"));
+        productGroupPermission.AddChild(WebAppSamplePermissions.ProductGroups.Delete, L("Permission:Delete"));
 
         //Define your own permissions here. Example:
         //myGroup.AddPermission(WebAppSamplePermissions.MyPermission1, L("Permission:MyPermission1"));

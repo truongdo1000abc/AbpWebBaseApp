@@ -58,6 +58,8 @@ using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Studio.Client.AspNetCore;
 
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AutoMapper;
 
 namespace WebAppSample;
 
@@ -122,6 +124,16 @@ public class WebAppSampleModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+
+        // Chỉ bật tính năng hiện lỗi chi tiết khi đang ở môi trường Code (Development)
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpExceptionHandlingOptions>(options =>
+            {
+                // Bật cờ này lên là mọi lỗi lầm ở Backend sẽ được phơi bày ra hết
+                options.SendExceptionsDetailsToClients = true;
+            });
+        }
 
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {

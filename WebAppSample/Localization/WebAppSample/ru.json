@@ -4,6 +4,15 @@
     "AppName": "WebAppSample",
     "Welcome_Title": "Bine ati venit",
     "Welcome_Text": "Acesta este un șablon de pornire a aplicației minimaliste, cu un singur strat, pentru Cadrul ABP.",
-    "Menu:Home": "Главная"
+    "Menu:Home": "Главная",
+    "Menu:Products": "Продукты",
+    "Menu:ProductGroups": "Группы продуктов",
+    "Welcome_User": "Добро пожаловать снова, {0}!",
+    "Permission:AppManagement": "Управление приложением",
+    "Permission:Products": "Управление продуктами",
+    "Permission:ProductGroups": "Управление группами продуктов",
+    "Permission:Create": "Создать",
+    "Permission:Edit": "Редактировать",
+    "Permission:Delete": "Удалить"
   }
 }

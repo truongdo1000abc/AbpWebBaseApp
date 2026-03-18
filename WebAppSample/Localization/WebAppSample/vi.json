@@ -6,6 +6,14 @@
     "Welcome_Text": "Đây là một mẫu khởi động ứng dụng lớp đơn, tối giản cho ABP Framework.",
     "Menu:Home": "Trang chủ",
     "Menu:Products": "Sản phẩm",
-    "Welcome_User": "Chào mừng trở lại, {0}!"
+    "Menu:ProductGroups": "Nhóm sản phẩm",
+    "Welcome_User": "Chào mừng trở lại, {0}!",
+    "AppManagement": "Quản lý ứng dụng",
+    "Permission:AppManagement": "Quản lý ứng dụng",
+    "Permission:Products": "Quản lý Sản phẩm",
+    "Permission:ProductGroups": "Quản lý Nhóm sản phẩm",
+    "Permission:Create": "Tạo mới",
+    "Permission:Edit": "Chỉnh sửa",
+    "Permission:Delete": "Xóa"
   }
 }

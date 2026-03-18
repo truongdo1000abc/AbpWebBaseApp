@@ -24,16 +24,25 @@ function configureRoutes() {
       order: 2,                        
       layout: eLayoutType.application, 
       // Dòng này cực kỳ quan trọng: Khớp chính xác với chuỗi string ở C#
-      requiredPolicy: 'MyProject.Products',
+      requiredPolicy: 'AppManagement.Products',
     },
     {
       path: '/invoices',
       name: '::Menu:Invoice', 
       iconClass: 'fas fa-file-invoice',        
-      order: 2,                        
+      order: 3,                        
       layout: eLayoutType.application, 
       // Dòng này cực kỳ quan trọng: Khớp chính xác với chuỗi string ở C#
-      requiredPolicy: 'MyProject.Invoices',
+      requiredPolicy: 'AppManagement.Invoices',
+    }
+    ,
+    {
+      path: '/product-groups',
+      name: '::Menu:ProductGroups',
+      iconClass: 'fas fa-layer-group',
+      order: 4,
+      layout: eLayoutType.application,
+      requiredPolicy: 'AppManagement.ProductGroups',
     }
   ]);
 }

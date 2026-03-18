@@ -6,6 +6,12 @@
     "Welcome_Text": "This is a minimalist, single layer application startup template for the ABP Framework.",
     "Menu:Home": "Home",
     "Menu:Products": "Products",
-    "Welcome_User": "Welcome back, {0}!"
+    "Welcome_User": "Welcome back, {0}!",
+    "AppManagement": "App Management",
+    "Permission:Products": "Product Management",
+    "Permission:ProductGroups": "Product Group Management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete"
   }
 }

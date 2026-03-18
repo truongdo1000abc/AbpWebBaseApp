@@ -26,5 +26,17 @@ export const APP_ROUTES: Routes = [
   {
     path: 'products',
     loadComponent: () => import('./products/products').then(c => c.Products),
+    canActivate: [permissionGuard],
+    data: { requiredPolicy: 'AppManagement.Products', redirectUrl: '/unauthorized' },
+  },
+  {
+    path: 'product-groups',
+    loadComponent: () => import('./product-groups/product-groups').then(c => c.ProductGroups),
+    canActivate: [permissionGuard],
+    data: { requiredPolicy: 'AppManagement.ProductGroups', redirectUrl: '/unauthorized' },
+  },
+  {
+    path: 'unauthorized',
+    loadComponent: () => import('./unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent),
   },
 ];
