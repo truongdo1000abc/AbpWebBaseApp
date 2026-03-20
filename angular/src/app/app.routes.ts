@@ -35,6 +35,11 @@ export const APP_ROUTES: Routes = [
     canActivate: [permissionGuard],
     data: { requiredPolicy: 'AppManagement.ProductGroups', redirectUrl: '/unauthorized' },
   },
+   {
+    path: 'sales',
+    loadComponent: () => import('./sales/sales.component').then(c => c.SalesComponent),
+    canActivate: [authGuard], // Chỉ cần đăng nhập là vào được
+  },
   {
     path: 'unauthorized',
     loadComponent: () => import('./unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent),

@@ -1,0 +1,161 @@
+:host {
+  display: block;
+}
+.sales-container {
+  height: calc(100vh - 150px);
+}
+.product-list-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.payment-card {
+  height: 100%;
+}
+.ant-table-body {
+  overflow-y: auto !important;
+}
+.total-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+/* --- Custom styles cho phần thanh toán --- */
+.payment-card {
+  /* Cho phép cuộn dọc phần form nếu nội dung quá dài mà không vỡ layout */
+  form {
+    overflow-y: auto;
+    padding-right: 4px; /* Tạo khoảng hở cho thanh cuộn */
+  }
+
+  /* Tăng khoảng cách giữa Label và Input */
+  .ant-form-item-label {
+    padding-bottom: 8px !important; 
+    font-weight: 600;
+    white-space: normal !important;
+    text-align: left !important;
+
+    label {
+      white-space: normal !important;
+      height: auto !important;
+    }
+  }
+}
+
+/* Style cho ô nhập tiền: To, Đậm, Rộng 100% */
+.payment-money-input {
+  width: 100%;
+  
+  input {
+    font-size: 1.25rem !important; /* Chữ to khoảng 20px */
+    font-weight: 700 !important;   /* In đậm */
+    height: 45px !important;       /* Tăng chiều cao ô nhập cho dễ bấm */
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+/* PRINT STYLES */
+/* Do đã tắt ViewEncapsulation, các style này sẽ ảnh hưởng toàn cục */
+@media print {
+  @page {
+    size: 80mm auto; /* Khổ giấy in nhiệt 80mm */
+    margin: 3mm;
+  }
+
+  /* Ẩn các thành phần layout chính của trang */
+  .lpx-sidebar,
+  .lpx-header,
+  .lpx-topbar,
+  .lpx-footer,
+  .lpx-copyright,
+  .ant-layout-sider,
+  .ant-layout-header,
+  .ant-layout-footer,
+  header,
+  footer {
+    display: none !important;
+  }
+
+  /* Ẩn giao diện bán hàng */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset các container để hóa đơn chiếm toàn bộ trang in */
+  html, body {
+    width: 80mm;
+    background: #fff !important;
+    font-size: 9pt; /* Giảm cỡ chữ cho dễ đọc trên giấy nhỏ */
+    -webkit-print-color-adjust: exact; /* Đảm bảo in màu nền và chữ nếu có */
+    color-adjust: exact;
+  }
+
+  .ant-layout-content,
+  .layout-content,
+  .lpx-content-container,
+  app-sales {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hiển thị phần hóa đơn */
+  .print-only {
+    display: block !important;
+    padding: 0 !important; /* Bỏ padding của bootstrap */
+
+    /* --- Style cho nội dung hóa đơn --- */
+    h2, h3 {
+      font-size: 12pt;
+      margin: 2mm 0;
+    }
+    p {
+      font-size: 9pt;
+      margin: 0.5mm 0;
+    }
+
+    /* Bảng sản phẩm - style lại cho khổ giấy hẹp */
+    table {
+      width: 100%;
+      thead th {
+        font-size: 8pt;
+        padding: 5px 2px;
+        white-space: nowrap;
+      }
+      tbody td {
+        padding: 5px 2px;
+        vertical-align: top;
+      }
+      /* Căn chỉnh lại các cột */
+      td:nth-child(1), th:nth-child(1) { width: 45%; word-break: break-word; } /* Tên SP */
+      td:nth-child(2), th:nth-child(2) { width: 10%; text-align: center !important; } /* SL */
+      td:nth-child(3), th:nth-child(3) { width: 20%; text-align: right !important; } /* Đơn giá */
+      td:nth-child(4), th:nth-child(4) { width: 25%; text-align: right !important; font-weight: bold; } /* T.Tiền */
+    }
+
+    /* Phần tổng kết */
+    div[style*="justify-content: flex-end"] {
+      display: flex !important;
+      justify-content: space-between !important;
+      font-size: 10pt;
+      padding: 2px 0;
+      span:first-child {
+        width: auto !important; /* Bỏ width cố định */
+      }
+    }
+    
+    /* Dòng tổng thanh toán cuối cùng */
+    div[style*="font-size: 1.2em"] {
+      font-size: 12pt !important;
+      border-top: 1px solid #000 !important;
+      padding-top: 5px !important;
+    }
+  }
+}

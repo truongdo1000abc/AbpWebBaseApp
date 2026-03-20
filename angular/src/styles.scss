@@ -42,31 +42,34 @@
 }
 
 /* Fullscreen modal for product editor (global so overlay modals inherit it) */
-.product-fullscreen-modal .modal-dialog {
+/* UPDATE: Sửa .modal-dialog (Bootstrap) thành .ant-modal (Ant Design) */
+.product-fullscreen-modal {
+  padding: 0 !important;
+}
+
+.product-fullscreen-modal .ant-modal {
   max-width: 100vw !important;
   width: 100vw !important;
   height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
   transform: none !important;
+  top: 0 !important;
 }
 
-.product-fullscreen-modal .modal-content {
+.product-fullscreen-modal .ant-modal-content {
   height: 100vh !important;
   border-radius: 0 !important;
   display: flex;
   flex-direction: column;
 }
 
-.product-fullscreen-modal .modal-header,
-.product-fullscreen-modal .modal-footer {
-  flex: 0 0 auto;
-}
-
-.product-fullscreen-modal .modal-body {
+/* Ant Design modal body class */
+.product-fullscreen-modal .ant-modal-body {
   overflow: auto;
   flex: 1 1 auto;
   padding: 1rem;
+  height: calc(100vh - 110px); /* Trừ hao header và footer */
 }
 
 /* Ensure CKEditor and inner content can grow to available height */
@@ -76,9 +79,9 @@
 }
 
 @media (max-width: 576px) {
-  .product-fullscreen-modal .modal-dialog {
+  .product-fullscreen-modal .ant-modal {
     height: 100vh !important;
   }
 }
 
-
+@import 'ng-zorro-antd/ng-zorro-antd.min.css';

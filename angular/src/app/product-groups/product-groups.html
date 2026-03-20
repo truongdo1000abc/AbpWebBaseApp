@@ -1,104 +1,141 @@
-<div class="card">
-  <div class="card-header">
-    <div class="row align-items-center">
-      <div class="col col-md-6">
-        <h5 class="card-title">Product Groups</h5>
-      </div>
-      <div class="text-end col col-md-6">
-        <button id="create" class="btn btn-primary" type="button" (click)="create()">
-          <i class="fa fa-plus me-1"></i>
-          <span>New Group</span>
-        </button>
-      </div>
-    </div>
+<!-- d:\Projects\AbpWebBaseApp\angular\src\app\product-groups\product-groups.component.html -->
+
+<nz-card [nzBordered]="false">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">{{ '::Menu:ProductGroups' | abpLocalization }}</h3>
+    <button nz-button nzType="primary" (click)="createGroup()">
+      <span nz-icon nzType="plus"></span>
+      {{ '::AddNew' | abpLocalization }}
+    </button>
   </div>
 
-  <div class="card-body">
-    <ngx-datatable [rows]="productGroups.items" [count]="productGroups.totalCount" [list]="list" default>
-      <ngx-datatable-column [name]="'::Actions' | abpLocalization" [maxWidth]="150" [sortable]="false">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          <div ngbDropdown container="body" class="d-inline-block">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" ngbDropdownToggle>
-              Actions
-            </button>
-            <div ngbDropdownMenu>
-              <button ngbDropdownItem (click)="edit(row.id)">Edit</button>
-              <button ngbDropdownItem (click)="view(row.id)">View</button>
-              <button ngbDropdownItem (click)="delete(row.id)">Delete</button>
-            </div>
-          </div>
-        </ng-template>
-      </ngx-datatable-column>
+  <!-- Table -->
+  <nz-table
+    #table
+    [nzData]="data.items"
+    [nzTotal]="data.totalCount"
+    [nzFrontPagination]="false"
+    [nzLoading]="list.isLoading$ | async"
+    [nzPageSize]="list.maxResultCount"
+    [nzPageIndex]="list.page + 1"
+    (nzQueryParams)="onQueryParamsChange($event)"
+    nzShowSizeChanger
+  >
+    <thead>
+      <tr>
+        <th nzWidth="80px" nzLeft></th>
+        <th nzColumnKey="code" [nzSortFn]="true" nzWidth="150px">{{ '::ProductGroups:Code' | abpLocalization }}</th>
+        <th nzColumnKey="name" [nzSortFn]="true">{{ '::ProductGroups:Name' | abpLocalization }}</th>
+        <th>{{ '::ProductGroups:ParentCode' | abpLocalization }}</th>
+        <th nzWidth="100px">{{ '::ProductGroups:Level' | abpLocalization }}</th>
+        <th>{{ '::ProductGroups:Description' | abpLocalization }}</th>
+        <th nzWidth="120px">{{ '::ProductGroups:Status' | abpLocalization }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of table.data; track item.id) {
+        <tr>
+          <td nzLeft>
+            <a nz-dropdown [nzDropdownMenu]="menu">
+              <nz-icon nzType="down" />
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="editGroup(item.id)">
+                  <span nz-icon nzType="edit" class="me-2"></span>{{ '::Edit' | abpLocalization }}
+                </li>
+                <li nz-menu-item nzDanger (click)="deleteGroup(item.id)">
+                  <span nz-icon nzType="delete" class="me-2"></span>{{ '::Delete' | abpLocalization }}
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </td>
+          <td>
+            <nz-tag [nzColor]="'blue'">{{ item.code }}</nz-tag>
+          </td>
+          <td><span class="fw-semibold">{{ item.name }}</span></td>
+          <td>{{ item.parentCode }}</td>
+          <td>{{ item.level }}</td>
+          <td>{{ item.description }}</td>
+          <td>
+            <nz-tag [nzColor]="item.isActive ? 'success' : 'default'">
+              {{ item.isActive ? ('::Active' | abpLocalization) : ('::Inactive' | abpLocalization) }}
+            </nz-tag>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-card>
 
-      <ngx-datatable-column [name]="'Name'" prop="name"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'Code'" prop="code"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'Level'" prop="level"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'Parent'" prop="parentCode"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'Sort'" prop="sortOrder"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'Status'" prop="isActive">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          <span class="badge" [ngClass]="row.isActive ? 'bg-success' : 'bg-secondary'">
-            {{ row.isActive ? 'Active' : 'Inactive' }}
-          </span>
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column [name]="'Description'" prop="description">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          <small class="text-muted">{{ row.description || '-' }}</small>
-        </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
-  </div>
-</div>
-
-<abp-modal [(visible)]="isModalOpen">
-  <ng-template #abpHeader>
-    <h3>{{ (selected.id ? 'Edit Group' : 'New Group') }}</h3>
-  </ng-template>
-
-  <ng-template #abpBody>
-    <form [formGroup]="form" id="group-form">
-      <div class="row g-3">
-        <div class="col-12 col-md-6">
-          <label for="name">Name <span class="text-danger">*</span></label>
-          <input id="name" class="form-control" formControlName="name" />
+<!-- Modal Create/Edit -->
+<nz-modal
+  [(nzVisible)]="isModalOpen"
+  [nzTitle]="(selectedGroup.id ? '::Edit' : '::AddNew') | abpLocalization"
+  (nzOnCancel)="isModalOpen = false"
+  (nzOnOk)="save()"
+  [nzOkLoading]="isSaving"
+  [nzWidth]="600"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" nzLayout="vertical">
+      
+      <div class="row">
+        <div class="col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ '::ProductGroups:Code' | abpLocalization }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'::Validation:Required' | abpLocalization">
+              <input nz-input formControlName="code" placeholder="Mã nhóm (VD: DIENTU)" />
+            </nz-form-control>
+          </nz-form-item>
         </div>
-        <div class="col-12 col-md-6">
-          <label for="code">Code</label>
-          <input id="code" class="form-control" formControlName="code" />
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label for="level">Level</label>
-          <input type="number" id="level" class="form-control" formControlName="level" />
-        </div>
-        <div class="col-12 col-md-4">
-          <label for="parent">Parent Code</label>
-          <input id="parent" class="form-control" formControlName="parentCode" />
-        </div>
-        <div class="col-12 col-md-4">
-          <label for="sort">Sort Order</label>
-          <input type="number" id="sort" class="form-control" formControlName="sortOrder" />
-        </div>
-
-        <div class="col-12">
-          <label for="description">Description</label>
-          <textarea id="description" class="form-control" rows="3" formControlName="description"></textarea>
-        </div>
-
-        <div class="col-12 d-flex align-items-center">
-          <div class="form-check form-switch mt-2">
-            <input class="form-check-input" type="checkbox" id="active" formControlName="isActive" />
-            <label class="form-check-label ms-2" for="active">Active</label>
-          </div>
+        <div class="col-md-6">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ '::ProductGroups:Name' | abpLocalization }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'::Validation:Required' | abpLocalization">
+              <input nz-input formControlName="name" placeholder="Tên nhóm sản phẩm" />
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ '::ProductGroups:ParentCode' | abpLocalization }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="parentCode" placeholder="Mã nhóm cha" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-md-6">
+          <nz-form-item>
+            <nz-form-label>{{ '::ProductGroups:Level' | abpLocalization }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="level" [nzPlaceHolder]="'::ProductGroups:Level' | abpLocalization">
+                <nz-option [nzValue]="1" nzLabel="1"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="2"></nz-option>
+                <nz-option [nzValue]="3" nzLabel="3"></nz-option>
+                <nz-option [nzValue]="4" nzLabel="4"></nz-option>
+                <nz-option [nzValue]="5" nzLabel="5"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ '::ProductGroups:Description' | abpLocalization }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" rows="3"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="mt-2">
+        <label nz-checkbox formControlName="isActive">{{ '::Active' | abpLocalization }}</label>
+      </div>
+
     </form>
-  </ng-template>
-
-  <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" abpClose>Cancel</button>
-    <button *ngIf="!isViewMode" class="btn btn-primary" (click)="save()" [disabled]="form.invalid">Save</button>
-  </ng-template>
-</abp-modal>
+  </ng-container>
+</nz-modal>

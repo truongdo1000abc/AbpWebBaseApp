@@ -305,6 +305,8 @@ public class WebAppSampleModule : AbpModule
             options.Languages.Add(new LanguageInfo("sv", "sv", "Swedish")); 
             options.Languages.Add(new LanguageInfo("tr", "tr", "Turkish")); 
             options.Languages.Add(new LanguageInfo("vi", "vi", "Vietnamese")); 
+            options.Languages.Add(new LanguageInfo("jp", "jp", "日本語"));
+
 
         });
 

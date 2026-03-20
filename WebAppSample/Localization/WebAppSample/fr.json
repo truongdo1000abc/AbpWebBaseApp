@@ -1,8 +1,36 @@
 {
- "culture": "fr",
- "texts": {
-  "Welcome_Title": "Bienvenue",
-  "Welcome_Text": "Il s'agit d'un modèle de démarrage d'application minimaliste à une seule couche pour le cadre ABP.",
-  "Menu:Home": "Accueil"
- }
+  "culture": "fr",
+  "texts": {
+    "AppName": "Gestion des ventes",
+    "Welcome_Title": "Bienvenue",
+    "Welcome_Text": "Ceci est un modèle de démarrage d'application monocouche minimaliste pour le framework ABP.",
+    "Menu:Home": "Accueil",
+    "Menu:Products": "Produits",
+    "Menu:ProductGroups": "Groupes de produits",
+    "Welcome_User": "Bon retour, {0} !",
+    "AppManagement": "Gestion de l'application",
+    "Permission:AppManagement": "Gestion de l'application",
+    "Permission:Products": "Gestion des produits",
+    "Permission:ProductGroups": "Gestion des groupes de produits",
+    "Permission:Create": "Créer",
+    "Permission:Edit": "Modifier",
+    "Permission:Delete": "Supprimer",
+    "products": {
+      "EnterProductName": "Entrez le nom du produit",
+      "EnterProductNameRequired": "Veuillez entrer le nom du produit",
+      "Group1": "Groupe 1",
+      "SelectGroup1": "Sélectionner le groupe 1",
+      "Group2": "Groupe 2",
+      "SelectGroup2": "Sélectionner le groupe 2",
+      "Group3": "Groupe 3",
+      "SelectGroup3": "Sélectionner le groupe 3",
+      "Group4": "Groupe 4",
+      "SelectGroup4": "Sélectionner le groupe 4",
+      "None": "-- Aucun --",
+      "UploadOrPaste": "Télécharger / Coller l'image",
+      "ViewOriginalImage": "Voir l'image originale",
+      "RemoveImage": "Supprimer l'image",
+      "Currency": "€"
+    }
+  }
 }

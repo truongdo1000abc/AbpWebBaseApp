@@ -1,0 +1,6 @@
+/* Thêm hiệu ứng viền xanh khi focus vào vùng upload/paste */
+.upload-area-wrapper:focus-within .avatar-uploader {
+  border-color: #1890ff; /* Màu xanh của Ant Design */
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}

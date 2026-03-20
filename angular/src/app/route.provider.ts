@@ -27,6 +27,14 @@ function configureRoutes() {
       requiredPolicy: 'AppManagement.Products',
     },
     {
+      path: '/sales',
+      name: '::Menu:Sales', // Key đa ngôn ngữ hoặc để text cứng nếu chưa có
+      iconClass: 'fas fa-shopping-cart',
+      order: 1.5, // Hiển thị ngay sau Home
+      layout: eLayoutType.application,
+      // requiredPolicy: 'AppManagement.Sales', // Bỏ comment nếu muốn phân quyền
+    },
+    {
       path: '/invoices',
       name: '::Menu:Invoice', 
       iconClass: 'fas fa-file-invoice',        

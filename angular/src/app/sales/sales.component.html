@@ -1,0 +1,375 @@
+<!-- GIAO DIỆN BÁN HÀNG (Sẽ ẩn khi in) -->
+<div class="sales-container no-print">
+  <div nz-row [nzGutter]="16" class="h-100">
+    
+    <!-- CỘT TRÁI: Tìm kiếm và Danh sách sản phẩm -->
+    <div nz-col [nzSpan]="16" class="h-100 d-flex flex-column">
+      
+      <!-- Phần Tìm kiếm Sản phẩm -->
+      <nz-card [nzBordered]="false" class="mb-3 flex-shrink-0">
+        <nz-form-item class="mb-0">
+          <nz-form-label [nzSpan]="0">Chọn sản phẩm</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              nzShowSearch
+              nzServerSearch
+              nzPlaceHolder="Nhập tên sản phẩm hoặc mã SKU..."
+              [(ngModel)]="selectedProduct"
+              (nzOnSearch)="onSearch($event)"
+              (ngModelChange)="addProductToCart($event)"
+              [nzLoading]="isSearching"
+              style="width: 100%;"
+              nzSize="large"
+              [nzAutoClearSearchValue]="true"
+            >
+              @for (product of searchResult; track product.id) {
+                <nz-option 
+                  [nzValue]="product.id" 
+                  [nzLabel]="product.name + ' - ' + (product.price | number) + ' đ'">
+                </nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+
+      <!-- Phần Bảng danh sách đã chọn -->
+      <nz-card [nzBordered]="false" class="flex-grow-1 product-list-card" [nzBodyStyle]="{ padding: '0', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }">
+        <nz-table 
+          #cartTable 
+          [nzData]="cart" 
+          [nzFrontPagination]="false" 
+          [nzShowPagination]="false"
+          [nzScroll]="{ y: 'calc(100vh - 350px)' }"
+          class="flex-grow-1"
+        >
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th nzWidth="120px" nzAlign="right">Đơn giá</th>
+              <th nzWidth="120px" nzAlign="center">Số lượng</th>
+              <th nzWidth="150px" nzAlign="right">Thành tiền</th>
+              <th nzWidth="60px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of cartTable.data; track item.cartId) {
+              <tr>
+                <td>
+                  <div class="fw-bold">{{ item.name }}</div>
+                  <small class="text-muted">{{ item.sku }}</small>
+                </td>
+                <td nzAlign="right">{{ item.price | number }}</td>
+                <td nzAlign="center">
+                  <nz-input-number 
+                    [ngModel]="item.quantity" 
+                    [nzMin]="1" 
+                    [nzStep]="1" 
+                    nzSize="small"
+                    (ngModelChange)="updateQuantity(item, $event)">
+                  </nz-input-number>
+                </td>
+                <td nzAlign="right" class="fw-bold text-primary">
+                  {{ item.totalPrice | number }}
+                </td>
+                <td nzAlign="center">
+                  <button nz-button nzType="text" nzDanger (click)="removeFromCart(item.cartId)">
+                    <span nz-icon nzType="delete"></span>
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (cart.length === 0) {
+              <tr class="ant-table-placeholder">
+                <td colspan="5" class="text-center py-5 text-muted">
+                  <span nz-icon nzType="shopping-cart" style="font-size: 32px; margin-bottom: 10px;"></span>
+                  <br/>
+                  Chưa có sản phẩm nào được chọn
+                </td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+
+    <!-- CỘT PHẢI: Thanh toán -->
+    <div nz-col [nzSpan]="8" class="h-100">
+      <nz-card [nzBordered]="false" class="payment-card h-100" [nzBodyStyle]="{ height: '100%', display: 'flex', flexDirection: 'column' }">
+        
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="mb-0 fw-bold">Thông tin thanh toán</h4>
+          <nz-tag [nzColor]="'blue'">{{ cart.length }} sản phẩm</nz-tag>
+        </div>
+
+        <form nz-form [formGroup]="paymentForm" nzLayout="horizontal" class="flex-grow-1">
+          
+          <!-- Customer Info -->
+          <nz-form-item class="mb-3">
+            <nz-form-label [nzSm]="6" [nzXs]="24">Tên khách</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24">
+              <input nz-input formControlName="customerName" placeholder="Tên khách hàng" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item class="mb-3">
+            <nz-form-label [nzSm]="6" [nzXs]="24">Số ĐT</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24">
+              <input nz-input formControlName="customerPhone" placeholder="Số điện thoại" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-divider class="my-3"></nz-divider>
+
+          <!-- Summary Lines -->
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Tổng tiền hàng:</span>
+            <span class="fw-bold">{{ subTotal | number }} đ</span>
+          </div>
+
+          <div>
+            <nz-form-item class="mb-3">
+              <nz-form-label [nzSm]="6" [nzXs]="24">Chiết khấu (Giảm giá)</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <nz-input-number 
+                  formControlName="discount" 
+                  [nzMin]="0" 
+                  [nzStep]="1000"
+                  [nzFormatter]="formatterCurrency"
+                  [nzParser]="parserCurrency"
+                  class="payment-money-input">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <nz-divider class="my-3"></nz-divider>
+
+          <!-- Total Due & Payment Inputs -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fs-5">Khách cần trả:</span>
+            <span class="total-amount">{{ totalDue | number }} đ</span>
+          </div>
+
+          <nz-form-item class="mb-3">
+            <nz-form-label [nzSm]="6" [nzXs]="24">Tiền khách đưa</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24">
+              <nz-input-number 
+                formControlName="customerPaid" 
+                [nzMin]="0" 
+                [nzStep]="1000"
+                [nzFormatter]="formatterCurrency"
+                [nzParser]="parserCurrency"
+                class="payment-money-input text-success">
+              </nz-input-number>
+              
+              <!-- Gợi ý tiền mặt -->
+              <div class="mt-2 d-flex flex-wrap gap-2">
+                <button nz-button nzSize="small" (click)="setCustomerPaid(totalDue)" nzType="dashed" class="text-primary border-primary">Vừa đủ</button>
+                @for (amount of denominations; track amount) {
+                  <button nz-button nzSize="small" (click)="setCustomerPaid(amount)">{{ amount | number }}</button>
+                }
+              </div>
+
+            </nz-form-control>
+          </nz-form-item>
+
+          <div class="d-flex justify-content-between align-items-center mb-4 p-2 bg-light rounded">
+            <span class="fw-semibold">Tiền trả lại:</span>
+            <span class="fw-bold text-danger fs-5">{{ changeAmount | number }} đ</span>
+          </div>
+
+          <!-- Payment Method -->
+          <nz-form-item class="mb-3">
+            <nz-form-label [nzSm]="6" [nzXs]="24">Phương thức thanh toán</nz-form-label>
+            <nz-form-control [nzSm]="18" [nzXs]="24">
+              <nz-radio-group formControlName="paymentMethod" class="d-flex flex-column gap-2">
+                <label nz-radio nzValue="Cash" class="mb-1">
+                  <span nz-icon nzType="dollar" class="me-2"></span> Tiền mặt
+                </label>
+                <div class="d-flex align-items-center mb-1">
+                  <label nz-radio nzValue="BankTransfer" class="me-2">
+                    <span nz-icon nzType="bank" class="me-2"></span> Chuyển khoản
+                  </label>
+                  <!-- Nút mở QR chỉ hiện khi chọn BankTransfer -->
+                  <button 
+                    *ngIf="paymentForm.get('paymentMethod')?.value === 'BankTransfer'" 
+                    nz-button nzType="default" nzSize="small" nzShape="round" 
+                    (click)="showQrModal()" type="button">
+                    <span nz-icon nzType="qrcode"></span> Tạo QR
+                  </button>
+                </div>
+                <label nz-radio nzValue="CreditCard">
+                  <span nz-icon nzType="credit-card" class="me-2"></span> Thẻ tín dụng
+                </label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Note -->
+          <nz-form-item class="mb-3">
+             <nz-form-label [nzSm]="6" [nzXs]="24">Ghi chú đơn hàng</nz-form-label>
+             <nz-form-control [nzSm]="18" [nzXs]="24">
+               <textarea nz-input formControlName="note" rows="2" placeholder="Ghi chú thêm..."></textarea>
+             </nz-form-control>
+          </nz-form-item>
+
+        </form>
+
+        <!-- Footer Buttons -->
+        <div class="mt-auto pt-3">
+          <div class="d-flex gap-2 mb-2">
+            <button nz-button (click)="saveDraft()" [disabled]="cart.length === 0" class="flex-grow-1">
+              <span nz-icon nzType="save"></span> Lưu tạm
+            </button>
+            <button nz-button (click)="isDraftModalVisible = true" class="flex-grow-1">
+              <span nz-icon nzType="history"></span> Đơn tạm ({{ savedDrafts.length }})
+            </button>
+          </div>
+          <button 
+            nz-button 
+            nzType="primary" 
+            nzBlock 
+            nzSize="large" 
+            (click)="submitOrder()" 
+            [nzLoading]="isSaving"
+            [disabled]="cart.length === 0"
+            class="mb-2 fw-bold"
+          >
+            <span nz-icon nzType="check-circle"></span> THANH TOÁN
+          </button>
+          
+          <button nz-button nzBlock (click)="resetSale()">
+            <span nz-icon nzType="reload"></span> Làm mới
+          </button>
+        </div>
+
+      </nz-card>
+    </div>
+  </div>
+</div>
+
+<!-- MẪU HÓA ĐƠN (Chỉ hiện khi in) -->
+<div class="print-only p-4" *ngIf="lastOrder">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">CỬA HÀNG ABC</h2>
+    <p>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM</p>
+    <p>Hotline: 0909 123 456</p>
+    <h3 class="mt-3">HÓA ĐƠN BÁN LẺ</h3>
+    <p>Số: {{ lastOrder.code }} | Ngày: {{ lastOrder.createdDate | date:'dd/MM/yyyy HH:mm' }}</p>
+    <div style="text-align: left; border-bottom: 1px dashed #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+      <p style="margin: 0;">Khách hàng: <strong>{{ lastOrder.customerName }}</strong></p>
+      <p style="margin: 0;" *ngIf="lastOrder.customerPhone">SĐT: {{ lastOrder.customerPhone }}</p>
+    </div>
+  </div>
+
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+    <thead>
+      <tr style="border-bottom: 1px solid #000;">
+        <th style="text-align: left; padding: 5px;">Sản phẩm</th>
+        <th style="text-align: right; padding: 5px;">SL</th>
+        <th style="text-align: right; padding: 5px;">Đơn giá</th>
+        <th style="text-align: right; padding: 5px;">T.Tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of lastOrder.items; track item.cartId) {
+        <tr style="border-bottom: 1px dotted #ccc;">
+          <td style="padding: 5px;">{{ item.name }}</td>
+          <td style="text-align: right; padding: 5px;">{{ item.quantity }}</td>
+          <td style="text-align: right; padding: 5px;">{{ item.price | number }}</td>
+          <td style="text-align: right; padding: 5px;">{{ item.totalPrice | number }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 5px;">
+    <span style="width: 150px;">Tổng tiền hàng:</span>
+    <span style="font-weight: bold;">{{ lastOrder.subTotal | number }}</span>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 5px;" *ngIf="lastOrder.discount > 0">
+    <span style="width: 150px;">Chiết khấu:</span>
+    <span>-{{ lastOrder.discount | number }}</span>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; font-size: 1.2em; border-top: 1px solid #000; padding-top: 10px;">
+    <span style="width: 150px; font-weight: bold;">Thanh toán:</span>
+    <span style="font-weight: bold;">{{ lastOrder.totalDue | number }} đ</span>
+  </div>
+  
+  <div class="mt-3" *ngIf="lastOrder.note">
+    <p><em>Ghi chú: {{ lastOrder.note }}</em></p>
+  </div>
+
+  <div class="text-center mt-5">
+    <p><i>Cảm ơn quý khách và hẹn gặp lại!</i></p>
+  </div>
+</div>
+
+<!-- MODAL QR CODE -->
+<nz-modal
+  [(nzVisible)]="isQrModalVisible"
+  nzTitle="Mã QR Chuyển khoản"
+  [nzFooter]="null"
+  (nzOnCancel)="isQrModalVisible = false"
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <div class="text-center">
+      <h4 class="text-primary mb-3">{{ totalDue | number }} đ</h4>
+      <div class="mb-3" style="min-height: 300px;">
+        <img [src]="qrCodeUrl" alt="QR Payment" style="max-width: 100%; height: auto; border-radius: 8px;">
+      </div>
+      <p class="mb-1"><strong>{{ bankName }}</strong></p>
+      <p class="text-muted">{{ bankId }} - {{ bankAccount }}</p>
+      <p class="text-muted fst-italic mt-2">Vui lòng quét mã bằng ứng dụng ngân hàng</p>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<!-- MODAL SAVED DRAFTS -->
+<nz-modal
+  [(nzVisible)]="isDraftModalVisible"
+  nzTitle="Danh sách đơn hàng tạm"
+  [nzFooter]="null"
+  (nzOnCancel)="isDraftModalVisible = false"
+  nzWidth="800px"
+>
+  <ng-container *nzModalContent>
+    <nz-table #draftTable [nzData]="savedDrafts" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+          <th>Khách hàng</th>
+          <th nzAlign="right">Tổng tiền</th>
+          <th>Ghi chú</th>
+          <th nzAlign="center">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of draftTable.data; track item.timestamp; let i = $index) {
+          <tr>
+            <td>{{ item.timestamp | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ item.formValue?.customerName || 'Khách lẻ' }}</td>
+            <td nzAlign="right" class="fw-bold">{{ item.totalDue | number }}</td>
+            <td>{{ item.formValue?.note }}</td>
+            <td nzAlign="center">
+               <button nz-button nzType="primary" nzSize="small" (click)="selectDraft(i)" class="me-2">Chọn</button>
+               <button nz-button nzType="default" nzDanger nzSize="small" (click)="deleteDraft(i)">Xóa</button>
+            </td>
+          </tr>
+        }
+        @if (savedDrafts.length === 0) {
+          <tr class="ant-table-placeholder">
+            <td colspan="5" class="text-center py-4 text-muted">
+              Không có đơn hàng tạm nào
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </ng-container>
+</nz-modal>

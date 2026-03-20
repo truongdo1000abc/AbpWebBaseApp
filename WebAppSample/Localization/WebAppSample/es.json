@@ -1,18 +1,36 @@
 {
   "culture": "es",
   "texts": {
-    "AppName": "WebAppSample",
+    "AppName": "Gestión de Ventas",
     "Welcome_Title": "Bienvenido",
-    "Welcome_Text": "Esta es una plantilla de inicio de aplicación minimalista de una sola capa para ABP Framework.",
+    "Welcome_Text": "Esta es una plantilla de inicio de aplicación minimalista de una sola capa para el ABP Framework.",
     "Menu:Home": "Inicio",
     "Menu:Products": "Productos",
     "Menu:ProductGroups": "Grupos de Productos",
-    "Welcome_User": "Bienvenido de nuevo, {0}!",
-    "Permission:AppManagement": "Gestión de la aplicación",
-    "Permission:Products": "Gestión de productos",
-    "Permission:ProductGroups": "Gestión de grupos de productos",
+    "Welcome_User": "¡Bienvenido de nuevo, {0}!",
+    "AppManagement": "Gestión de la Aplicación",
+    "Permission:AppManagement": "Gestión de la Aplicación",
+    "Permission:Products": "Gestión de Productos",
+    "Permission:ProductGroups": "Gestión de Grupos de Productos",
     "Permission:Create": "Crear",
     "Permission:Edit": "Editar",
-    "Permission:Delete": "Eliminar"
+    "Permission:Delete": "Eliminar",
+    "products": {
+      "EnterProductName": "Ingrese el nombre del producto",
+      "EnterProductNameRequired": "Por favor, ingrese el nombre del producto",
+      "Group1": "Grupo 1",
+      "SelectGroup1": "Seleccionar Grupo 1",
+      "Group2": "Grupo 2",
+      "SelectGroup2": "Seleccionar Grupo 2",
+      "Group3": "Grupo 3",
+      "SelectGroup3": "Seleccionar Grupo 3",
+      "Group4": "Grupo 4",
+      "SelectGroup4": "Seleccionar Grupo 4",
+      "None": "-- Ninguno --",
+      "UploadOrPaste": "Subir / Pegar Imagen",
+      "ViewOriginalImage": "Ver Imagen Original",
+      "RemoveImage": "Eliminar Imagen",
+      "Currency": "€"
+    }
   }
 }
